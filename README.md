@@ -40,6 +40,4 @@ The examples provided are the following:
 Licensed under the MIT License. See [LICENSE](LICENSE) for details.
 Dependencies are listed in the [environment.yml](environment.yml) file and are governed by their own licenses.
 
-If you use this software and/or its routines in your research, please cite:
-
-( TO BE ADDED )
+If you use this software and/or its routines in your research, please cite the most recent version of [this article](https://arxiv.org/abs/2510.18474).
