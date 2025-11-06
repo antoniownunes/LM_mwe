@@ -1,6 +1,6 @@
 # Levenberg-Marquardt algorithm for the determination of spacecraft trajectories in the Earth-Moon system: working examples
 
-In this repository you will find working examples of the Levenberg-Marquardt (LM) algorithm for the purposes of transitioning trajectories from the Circular Restricted Three-Body Problem (CR3BP) into a high-fidelity ephemeris model (HFEM), considering the attraction forces of the Earth, Moon, and Sun. A full explanation of the LM implementation and deeper analysis of the results obtained may be found in [this paper](...).
+In this repository you will find working examples of the Levenberg-Marquardt (LM) algorithm for the purposes of transitioning trajectories from the Circular Restricted Three-Body Problem (CR3BP) into a high-fidelity ephemeris model (HFEM), considering the attraction forces of the Earth, Moon, and Sun. A full explanation of the LM implementation and deeper analysis of the results obtained may be found in [this paper](https://arxiv.org/abs/2510.18474).
 
 ## Running
 
@@ -40,4 +40,4 @@ The examples provided are the following:
 Licensed under the MIT License. See [LICENSE](LICENSE) for details.
 Dependencies are listed in the [environment.yml](environment.yml) file and are governed by their own licenses.
 
-If you use this software and/or its routines in your research, please cite the most recent version of [this article](https://arxiv.org/abs/2510.18474).
+If you use this software and/or its routines in your research, please cite the most recent version of [this paper](https://arxiv.org/abs/2510.18474).
