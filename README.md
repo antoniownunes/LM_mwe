@@ -32,8 +32,8 @@ Alternatively, if you use an IDE such as VS Code or other similar platforms, it 
 ## Content
 
 The examples provided are the following:
-* **QPOs** : Showcase of the algorithm to determine quasi-periodics counterpart to periodic orbits from the CR3BP. *This is the starting example which should ideally be followed first*.
-* **Transfer** : Showcase of the algorithm to determine a transfer trajectory from an L2 Halo orbit to an L1 Lyapunov orbit from the CR3BP. The full LM algorithm, with the possibility for adaptive weighting is employed. *This is a more advanced example that requires the user to be acquainted with the first example*. **It is not recommended to run this example in a browser through binder.**
+* [**QPOs.ipynb**](QPOs.ipynb) : Showcase of the algorithm to determine quasi-periodics counterpart to periodic orbits from the CR3BP. *This is the starting example which should ideally be followed first*.
+* [**Transfer.ipynb**](Transfer.ipynb) : Showcase of the algorithm to determine a transfer trajectory from an L2 Halo orbit to an L1 Lyapunov orbit from the CR3BP. The full LM algorithm, with the possibility for adaptive weighting is employed. *This is a more advanced example that requires the user to be acquainted with the first example*. **It is not recommended to run this example in a browser through binder.**
 
 Both examples may be easily adapted to change the initial CR3BP guess for additional testing.
 
