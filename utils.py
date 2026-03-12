@@ -9,7 +9,106 @@ from tudatpy.numerical_simulation import propagation_setup
 from tudatpy.astro import element_conversion
 from tudatpy.util import result2array
 
+# Load pathlib
+from pathlib import Path
+
 ####### FUNCTIONS #######
+def retrieve_CR3BP_Transfer(num_pp):
+    # Basic checks for parameter compliance
+    if not (num_pp>=40 and num_pp<=100): ValueError("Number of total patch points must be between 40 and 100")
+
+    # Create file path to retrieve the CR3BP trajectory
+    base = Path.cwd()
+    file_path = base / "CR3BP_files" / "L2_L1_Transfer.txt"
+
+    # Store full initial (CR3BP) solution
+    q_nom = []
+    t_nom = []
+    with open(file_path, "r") as data:
+        lines = data.readlines()
+        for line in lines:
+            x, y1, y2, y3, y4, y5, y6 = line.split()
+            t_nom.append(float(x))
+            q_nom.append(([float(y1), float(y2), float(y3), float(y4), float(y5), float(y6)]))
+
+    # Convert to numpy arrays
+    t_nom = np.array(t_nom)
+    q_nom = np.array(q_nom)
+
+    # Number of file lines
+    N = len(t_nom)
+
+    # Array of ids to define patch points
+    idx = np.floor(np.linspace(0,N-1,num = num_pp+1)).astype(int)
+
+    # Patch points and relative times of the first revolution
+    q_nom_pp = q_nom[idx]
+    t_nom_pp = t_nom[idx]
+
+    # Return the results as numpy arrays
+    return t_nom_pp, q_nom_pp, q_nom
+
+
+# -- retrieve_CR3BP_PO() --
+# -> Retrieves the CR3BP periodic orbit corresponding to the Lagrange point and orbit family selected.
+#    Computes respective patch points considering the number of revolutions and patch points per
+#    revolution selected.
+def retrieve_CR3BP_PO(lagrange_point: str, orbit_family: str, num_rev: int, num_pp: int):
+    # Basic checks for parameter compliance
+    if not (lagrange_point == "L1" or lagrange_point == "L2"): ValueError("Lagrange Point must be either L1 or L2")
+    if not (orbit_family == "NHalo" or orbit_family == "SHalo" or orbit_family == "Lyap" or orbit_family == "Vert"):
+        ValueError("Orbit family must be either NHalo, SHalo, Lyap or Vert")
+    if not num_rev>0: ValueError("Number of revolutions must be a positive integer")
+    if not (num_pp>0 and num_pp<=10): ValueError("Number of patch points per revolution must be between 1 and 10")
+
+    # Create file path to retrieve the CR3BP trajectory
+    base = Path.cwd()
+    file_name = lagrange_point + "_" + orbit_family + ".txt"
+    file_path = base / "CR3BP_files" / file_name
+
+    # Store full initial (CR3BP) solution
+    q_nom = []
+    t_nom = []
+    with open(file_path, "r") as data:
+        lines = data.readlines()
+        for line in lines:
+            x, y1, y2, y3, y4, y5, y6 = line.split()
+            t_nom.append(float(x))
+            q_nom.append(([float(y1), float(y2), float(y3), float(y4), float(y5), float(y6)]))
+
+    # Convert to numpy arrays
+    t_nom = np.array(t_nom)
+    q_nom = np.array(q_nom)
+
+    # Number of file lines
+    N = len(t_nom)
+
+    # Array of ids to define patch points
+    idx = np.floor(np.linspace(0,N-1,num = num_pp+1)).astype(int)
+
+    # Patch points and relative times of the first revolution
+    q_pp_rev = q_nom[idx]
+    t_pp_rev = t_nom[idx]
+
+    # Create patch points and relative times for the number of revolutions selected
+    t_nom_pp = []
+    q_nom_pp = []
+    t_offset = 0
+    for i in range(num_rev):
+        for q, t in zip(q_pp_rev[:-1], t_pp_rev[:-1]):
+            q_nom_pp.append(q)
+            t_nom_pp.append(t + t_offset)
+        t_offset += t_pp_rev[-1]
+    
+    # Add final patch point
+    q_nom_pp.append(q_pp_rev[-1])
+    t_nom_pp.append(t_offset)
+
+    q_nom_pp=np.array(q_nom_pp)
+    t_nom_pp=np.array(t_nom_pp)
+
+    # Return the results as numpy arrays
+    return t_nom_pp, q_nom_pp, q_nom
 
 # -- get_keplerian_elements_moon() --
 # -> Retrieves the keplerian orbital elements of the Moon with respect to the Earth at the time instant provided
@@ -201,8 +300,8 @@ def create_Q(pp_to_weight, weights, N_pp):
     for pp, weight in zip(pp_to_weight, weights):
         if pp>N_pp:
             ValueError("Patch-point to weight exceeds number of patch points")
-        Q[6*(pp-1):6*(pp-1)+3,6*(pp-1):6*(pp-1)+3] = weight[0]*np.eye(3)
-        Q[6*(pp-1)+3:6*pp, 6*(pp-1)+3:6*pp] = weight[1]*np.eye(3)
+        Q[6*pp:6*pp+3,6*pp:6*pp+3] = weight[0]*np.eye(3)
+        Q[6*pp+3:6*pp+6, 6*pp+3:6*pp+6] = weight[1]*np.eye(3)
 
     return Q
 
