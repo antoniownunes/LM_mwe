@@ -86,3 +86,7 @@ cache/
 *.swp
 *.swo
 *~
+
+# Track CR3BP_files folder and its .txt files
+!CR3BP_files/
+!CR3BP_files/**/*.txt
