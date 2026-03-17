@@ -13,6 +13,10 @@ from tudatpy.util import result2array
 from pathlib import Path
 
 ####### FUNCTIONS #######
+
+# -- retrieve_CR3BP_Transfer() --
+# -> Retrieves the CR3BP transfer from the L2 Northern Halo to L1 Lyapunov orbit.
+#    Computes respective patch points considering the number of total patch points selected.
 def retrieve_CR3BP_Transfer(num_pp):
     # Basic checks for parameter compliance
     if not (num_pp>=40 and num_pp<=100): ValueError("Number of total patch points must be between 40 and 100")
